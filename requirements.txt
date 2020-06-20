@@ -1,0 +1,6 @@
+bs4
+asyncio
+discord.py
+colorama
+requests
+    
