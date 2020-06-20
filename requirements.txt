@@ -3,4 +3,6 @@ asyncio
 discord.py
 colorama
 requests
-    
+websockets
+chardet
+aiohttp
