@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup as bs
 from bs4 import BeautifulSoup
 import datetime
 import os
-import youtube_dl
+#import youtube_dl
 from random import choice
 #from cogs.dbconnect import *
 import sqlite3
