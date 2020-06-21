@@ -74,6 +74,7 @@ async def avatar(ctx, member: discord.Member):
 
 @Bot.event
 async def on_message(message):
+    await Bot.process_commands(message)
     if message.channel.id == 723252561758388276:
         await message.add_reaction("✅")
         await message.add_reaction("❎")
