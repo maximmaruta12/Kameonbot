@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup as bs
 from bs4 import BeautifulSoup
 import datetime
 import os
+import sys
 #import youtube_dl
 
 
@@ -105,10 +106,53 @@ async def avatar(ctx, member: discord.Member):
         await ctx.send(member.avatar_url)
 
 
-@Bot.command()
-async def domination(ctx):
-    pass
+@Bot.command() # Попытки 5
+async def угадайка(ctx):
+    await ctx.message.delete()
+    num = random.randint(1, 20)
+    attems = 1
+    msg = await ctx.send('Подождите...')
+    while attems < 6:
+        emb = discord.Embed(
+            title = f'Попытка №{attems}',
+            description= 'Угадайте число от 1 до 20'
+        )
+        await msg.edit(content= None, embed=emb)
+        
+        try:
+            msg_o = await  Bot.wait_for('message', timeout= 30.0, check= lambda msg_o: msg_o.author == ctx.author)
+        except asyncio.TimeoutError:
+            await msg.edit(content= 'Время вышло!', embed=None)
+            break
+        else:
+            if num == int(msg_o.content):
+                emb1 = discord.Embed(
+                    title= 'Вы победили!',
+                    description= 'Вы угадали число!'
+                )
+                await msg_o.delete()
+                await msg.edit(content= None, embed=emb1)
+                break
+            else:
+                attems_h = 5 - attems
+                attems = attems + 1
 
+                if attems == 6:
+                    emb2 = discord.Embed(
+                        title= 'Вы проиграли!',
+                        description= f'Загаданое число было : {num}'
+                    )
+                    await msg_o.delete()
+                    await msg.edit(embed=emb2)
+                    break
+
+                emb2 = discord.Embed(
+                    title= 'Неудачная попытка!',
+                    description= f'Вы не угадали число у вас осталось {attems_h} попыток'
+                )
+                await msg.edit(content= None, embed=emb2)
+                await msg_o.delete() 
+                await asyncio.sleep(5)
 
 @Bot.command()
 async def my_roles(ctx):
