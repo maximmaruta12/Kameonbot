@@ -37,43 +37,7 @@ hueplet_chance = 5
 prefix = "k!"
 
 
-@Bot.event
-async def on_message(message):
-    await Bot.process_commands(message)
-    if message.channel.id == 723252561758388276 or message.channel.id == 723888963521347594:
-        await message.add_reaction("✅")
-        await message.add_reaction("❎")
 
-    if message.author == Bot.user:
-        pass
-    elif randint(0, 100) <= hueplet_chance:
-        print('Щас хуйни напишу')
-        channel = message.channel
-        msgs = []
-        async for msg in channel.history(limit=50):
-            if msg.author == Bot.user:
-                pass
-            elif msg.content.startswith(
-                    prefix):  # проверка, чтобы бот не агрился на команды (не агрится на сообщения, если в начале символ префикса команды)
-                pass
-            elif msg.content.startswith("http"):  # проверка, чтобы бот не агрился на ссылки
-                pass
-            # тут должна быть проверка, чтобы бот не агрился на эмодзи, я поленился писать...
-            else:
-                msgs.append(msg)
-            if len(msgs) > 0:
-                # типа бот такой человечный, и это он сам набирает текст!
-                async with channel.typing():
-                    msg = choice(msgs)  # выбирает случайное сообщение из отобранных
-                    async with aiohttp.ClientSession() as session:
-                        async with session.post('https://models.dobro.ai/gpt2/medium/',
-                                                json={"prompt": msg.content, "length": 60,
-                                                      "num_samples": randint(1, 5)}) as response:
-                            data = await response.json()
-                        await session.close()
-                    resp = f'{msg.content} {data["replies"][0]}'  # вытаскиваем ответ, который пришел от запроса
-                    await asyncio.sleep(randint(3, 5))  # еще задержка, чтобы чютка подольше печатал
-                    await message.channel.send(f'{msg.author.mention} {resp}')
 
 
 @Bot.command()
@@ -410,7 +374,7 @@ async def play_s(ctx, url: str):
     song_name = name.rsplit('-', 2)
     await ctx.send(f'Np: {song_name[0]}')
 
-
+@Bot.command()
 @commands.has_any_role('КАРАТЕЛЬ')
 async def mute(ctx, member: discord.Member, duration: int, *, arg):
     emb = discord.Embed(title='MUTE')
